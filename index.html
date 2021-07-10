@@ -26,7 +26,16 @@
             type="url"
             data-url
           />
-          <button type="submit" class="btn btn-primary">Send</button>
+          <button type="submit" class="btn btn-primary">
+            <span
+              request-loading
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              style="display: none"
+            ></span>
+            <span class="sr-only">Send</span>
+          </button>
         </div>
 
         <ul class="nav nav-tabs" role="tablist">

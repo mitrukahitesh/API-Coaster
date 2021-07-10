@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm install && npx snowpack dev"
+    "start": "npx snowpack dev"
   },
   "keywords": [],
   "author": "",

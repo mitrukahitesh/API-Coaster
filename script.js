@@ -11,6 +11,7 @@ const keyValueTemplate = document.querySelector("[data-key-value-template]");
 const responseHeadersContainer = document.querySelector(
   "[data-response-headers]"
 );
+const loadingSpan = document.querySelector("[request-loading]");
 
 function createKeyValuePair() {
   const element = keyValueTemplate.content.cloneNode(true);
@@ -95,6 +96,8 @@ axios.interceptors.response.use(updateEndTime, (e) => {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
+  loadingSpan.style.display = "inline-flex";
+
   let data;
 
   try {
@@ -119,6 +122,6 @@ form.addEventListener("submit", (e) => {
       updateResponseDetails(response);
       updateResponseEditor(response);
       updateResponseHeaders(response.headers);
-      console.log(response);
+      loadingSpan.style.display = "none";
     });
 });

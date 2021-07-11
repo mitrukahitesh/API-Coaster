@@ -20,14 +20,10 @@
     <title>API Coaster</title>
   </head>
 
-  <body>
-    <nav
-      class="navbar sticky-top navbar-light bg-light border-bottom"
-      nav-bar
-      style="display: none; background-color: blue"
-    >
+  <body style="overflow: hidden">
+    <nav class="navbar fixed-top navbar-light bg-light border-bottom" nav-bar>
       <div class="container-fluid ps-4">
-        <div class="row align-items-center flex-grow-1">
+        <div class="row align-items-center flex-grow-1 text-center" nav-bar-row>
           <div class="col">
             <a class="navbar-brand" href="#">
               <img
@@ -41,16 +37,23 @@
               <span user-name class="navbar-text ms-3"></span>
             </a>
           </div>
-          <div class="col-3 col-md-1 hoverEffect" sign-out-button>
+          <div
+            class="col-3 col-lg-3 col-md-2 col-xl-1 hoverEffect"
+            sign-out-button
+          >
             <i class="fas fa-sign-out-alt fa-1x"></i>
             <span user-name class="navbar-text ms-1">Sign Out</span>
           </div>
         </div>
       </div>
     </nav>
-    <div class="container-fluid">
+
+    <div class="container-fluid" style="padding-top: 56px">
       <div class="row">
-        <div class="col-md-4 col-xl-3 pt-4 border-end" style="height: 100vh">
+        <div
+          class="col-md-4 col-xl-3 pt-4 border-end"
+          style="overflow-y: auto; height: 100vh"
+        >
           <div
             class="
               row
@@ -75,7 +78,10 @@
           <div sign-in-button class="btn btn-success">Sign in with Google</div>
         </div>
 
-        <div class="col-xl-9 col-md-8 p-4">
+        <div
+          class="col-xl-9 col-md-8 p-4"
+          style="overflow-y: auto; max-height: 90vh"
+        >
           <form data-form>
             <div class="input-group mb-4">
               <select class="form-select flex-grow-0 w-auto" data-method>
@@ -281,7 +287,7 @@
                 <div
                   data-json-response-body
                   class="overflow-auto"
-                  style="max-height: 200px"
+                  style="max-height: 250px"
                 ></div>
               </div>
 
@@ -294,7 +300,7 @@
                 <div
                   data-json-response-full
                   class="overflow-auto"
-                  style="max-height: 200px"
+                  style="max-height: 250px"
                 ></div>
               </div>
             </div>

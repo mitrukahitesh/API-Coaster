@@ -289,5 +289,29 @@
       </div>
     </template>
     <script src="./script/script.js" type="module"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      import secrets from "./secrets";
+      var firebaseConfig = {
+        apiKey: "AIzaSyChiAWVuAh8VJByGJ_WxuICfaHjb9VrYq0",
+        authDomain: "api-coaster.firebaseapp.com",
+        projectId: "api-coaster",
+        storageBucket: "api-coaster.appspot.com",
+        messagingSenderId: "858146009539",
+        appId: "1:858146009539:web:ef0fe0ad583a817d9b0d76",
+        measurementId: "G-8778N88LSD",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
   </body>
 </html>

@@ -16,14 +16,38 @@
       integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk"
       crossorigin="anonymous"
     />
-    <meta
-      name="google-signin-client_id"
-      content="YOUR_CLIENT_ID.apps.googleusercontent.com"
-    />
+    <link rel="stylesheet" href="./style/style.css" />
     <title>API Coaster</title>
   </head>
 
   <body>
+    <nav
+      class="navbar sticky-top navbar-light bg-light border-bottom"
+      nav-bar
+      style="display: none; background-color: blue"
+    >
+      <div class="container-fluid ps-4">
+        <div class="row align-items-center flex-grow-1">
+          <div class="col">
+            <a class="navbar-brand" href="#">
+              <img
+                alt=""
+                width="40"
+                height="40"
+                class="d-inline-block align-text-center"
+                style="border-radius: 50%"
+                user-dp
+              />
+              <span user-name class="navbar-text ms-3"></span>
+            </a>
+          </div>
+          <div class="col-3 col-md-1 hoverEffect" sign-out-button>
+            <i class="fas fa-sign-out-alt fa-1x"></i>
+            <span user-name class="navbar-text ms-1">Sign Out</span>
+          </div>
+        </div>
+      </div>
+    </nav>
     <div class="container-fluid">
       <div class="row">
         <div class="col-3 pt-4 border-end" style="height: 100vh">

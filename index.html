@@ -52,7 +52,7 @@
       <div class="row">
         <div
           class="col-md-4 col-xl-3 pt-4 border-end"
-          style="overflow-y: auto; height: 100vh"
+          style="overflow-y: auto; height: 100vh; padding-bottom: 10vh"
         >
           <div
             class="
@@ -75,6 +75,10 @@
               <button class="btn btn-secondary btn-sm">Import</button>
             </div>
           </div>
+
+          <!-- Collection list -->
+          <div collection-list></div>
+
           <div
             sign-in-button
             class="s12 m6 offset-m3 center-align google-button mx-auto"
@@ -334,6 +338,27 @@
         />
         <button type="submit" data-remove-btn class="btn btn-outline-danger">
           Remove
+        </button>
+      </div>
+    </template>
+
+    <template collection-name-template>
+      <div
+        collection-container
+        class="mt-2"
+        style="display: flex; align-items: center"
+      >
+        <div style="flex: 1" collection-name-chevron>
+          <i collection-chevron class="fas fa-chevron-right"></i>
+          <span collection-name class="ms-2" style="flex: 1"></span>
+        </div>
+        <button
+          type="submit"
+          trash-icon-collection
+          class="btn btn-outline-danger btn-sm"
+          style="display: none"
+        >
+          <i class="far fa-trash-alt"></i>
         </button>
       </div>
     </template>

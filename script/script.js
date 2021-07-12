@@ -4,6 +4,8 @@ import axios from "axios";
 import prettyBytes from "pretty-bytes";
 import setupEditor from "./editor";
 
+// Request Response Script
+
 const form = document.querySelector("[data-form]");
 const queryParamsContainer = document.querySelector("[data-query-params]");
 const requestHeaderContainer = document.querySelector("[data-request-headers]");
@@ -125,3 +127,49 @@ form.addEventListener("submit", (e) => {
       loadingSpan.style.display = "none";
     });
 });
+
+// Collection List Script
+
+const collectionList = document.querySelector("[collection-list]");
+const collectionTemplate = document.querySelector("[collection-name-template]");
+
+addCollectionToList();
+
+function addCollectionToList() {
+  collectionList.append(createNewCollection());
+}
+
+function createNewCollection() {
+  const element = collectionTemplate.content
+    .cloneNode(true)
+    .querySelector("[collection-container]");
+  element.querySelector("[collection-name]").textContent = "API Coaster APIs";
+  element.addEventListener("mouseenter", () => {
+    element.querySelector("[trash-icon-collection]").style.display =
+      "inline-flex";
+    element.style.cursor = "pointer";
+  });
+  element.addEventListener("mouseleave", () => {
+    element.querySelector("[trash-icon-collection]").style.display = "none";
+  });
+  element
+    .querySelector("[collection-name-chevron]")
+    .addEventListener("click", (e) => {
+      const chevron = element
+        .querySelector("[collection-name-chevron]")
+        .querySelector("[collection-chevron]");
+      if (chevron.classList.contains("fa-chevron-right")) {
+        chevron.classList.remove("fa-chevron-right");
+        chevron.classList.add("fa-chevron-down");
+      } else {
+        chevron.classList.remove("fa-chevron-down");
+        chevron.classList.add("fa-chevron-right");
+      }
+    });
+  element
+    .querySelector("[trash-icon-collection]")
+    .addEventListener("click", (e) => {
+      e.target.closest("[collection-container]").remove();
+    });
+  return element;
+}

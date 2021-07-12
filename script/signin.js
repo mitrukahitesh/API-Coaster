@@ -4,6 +4,7 @@ const dp = document.querySelector("[user-dp]");
 const username = document.querySelector("[user-name]");
 const signOutButton = document.querySelector("[sign-out-button]");
 const navBarRow = document.querySelector("[nav-bar-row]");
+const collectionList = document.querySelector("[collection-list]");
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -32,6 +33,7 @@ function checkAuthState() {
       signOutButton.style.display = "block";
       dp.setAttribute("src", user.photoURL);
       navBarRow.classList.remove("text-center");
+      collectionList.style.display = "block";
     } else {
       button.style.display = "block";
       username.textContent = "API Coaster";
@@ -39,6 +41,7 @@ function checkAuthState() {
       dp.classList.remove("d-inline-block");
       signOutButton.style.display = "none";
       navBarRow.classList.add("text-center");
+      collectionList.style.display = "none";
     }
   });
 }

@@ -65,7 +65,7 @@
             "
           >
             <div class="col-md-6 col-lg-7">
-              <i class="fas fa-network-wired"></i>
+              <i class="far fa-folder fa-1x"></i>
               <span class="ms-1">My Workspace</span>
             </div>
             <div class="col-2 px-md-1 px-lg-0 pb-1">
@@ -352,14 +352,65 @@
           <i collection-chevron class="fas fa-chevron-right"></i>
           <span collection-name class="ms-2" style="flex: 1"></span>
         </div>
-        <button
-          type="submit"
-          trash-icon-collection
-          class="btn btn-outline-danger btn-sm"
-          style="display: none"
-        >
-          <i class="far fa-trash-alt"></i>
-        </button>
+        <div class="dropdown menu-hover" menu-collection>
+          <div
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style="height: 1.5rem; width: 1.5rem"
+          >
+            <i class="fas fa-ellipsis-v"></i>
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><div class="dropdown-item">Share</div></li>
+            <li><div class="dropdown-item text-success">Add request</div></li>
+            <li>
+              <div class="dropdown-item text-danger" delete-collection>
+                Delete
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div request-list></div>
+      </div>
+    </template>
+
+    <template request-name-template>
+      <div
+        request-container
+        class="mt-1"
+        style="display: flex; align-items: center; min-height: 1.5rem"
+      >
+        <div style="flex: 1; display: flex" request-name-method>
+          <span
+            request-method
+            class="ms-2 text-success"
+            style="font-size: small; width: 50px; text-align: end"
+          ></span>
+          <span
+            request-name
+            class="ms-2"
+            style="flex: 1; font-size: small"
+          ></span>
+        </div>
+        <div class="dropdown menu-hover" menu-request>
+          <div
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style="height: 1.5rem; width: 1.5rem"
+          >
+            <i class="fas fa-ellipsis-v"></i>
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <!-- <li><div class="dropdown-item">Share</div></li>
+            <li><div class="dropdown-item text-success">Add request</div></li> -->
+            <li>
+              <div class="dropdown-item text-danger" delete-request>Delete</div>
+            </li>
+          </ul>
+        </div>
+        <div request-list></div>
       </div>
     </template>
 

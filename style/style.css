@@ -2,6 +2,20 @@
   cursor: pointer;
 }
 
+.menu-hover {
+  display: none;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 4px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-hover:hover {
+  background-color: gainsboro;
+}
+
 .google-button {
   display: inline-block;
   background: white;

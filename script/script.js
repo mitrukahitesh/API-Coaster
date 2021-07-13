@@ -140,17 +140,15 @@ function addCollectionToList() {
 }
 
 function createNewCollection() {
-  const element = collectionTemplate.content
-    .cloneNode(true)
-    .querySelector("[collection-container]");
+  const root = collectionTemplate.content.cloneNode(true);
+  const element = root.querySelector("[collection-container]");
   element.querySelector("[collection-name]").textContent = "API Coaster APIs";
   element.addEventListener("mouseenter", () => {
-    element.querySelector("[trash-icon-collection]").style.display =
-      "inline-flex";
     element.style.cursor = "pointer";
+    element.querySelector("[menu-collection]").style.display = "inline-flex";
   });
   element.addEventListener("mouseleave", () => {
-    element.querySelector("[trash-icon-collection]").style.display = "none";
+    element.querySelector("[menu-collection]").style.display = "none";
   });
   element
     .querySelector("[collection-name-chevron]")
@@ -167,9 +165,46 @@ function createNewCollection() {
       }
     });
   element
-    .querySelector("[trash-icon-collection]")
+    .querySelector("[delete-collection]")
     .addEventListener("click", (e) => {
-      e.target.closest("[collection-container]").remove();
+      collectionList.remove(root);
     });
+  return element;
+}
+
+// Request List
+
+const requestList = document.querySelector("[request-list]");
+const requestTemplate = document.querySelector("[request-name-template]");
+
+addRequestToList();
+
+function addRequestToList() {
+  collectionList.append(createNewRequest());
+  collectionList.append(createNewRequest());
+}
+
+function createNewRequest() {
+  const element = requestTemplate.content
+    .cloneNode(true)
+    .querySelector("[request-container]");
+  element.querySelector("[request-method]").textContent = "GET";
+  element.querySelector("[request-name]").textContent =
+    "https://www.example.com/api/";
+  element.addEventListener("mouseenter", () => {
+    element.style.cursor = "pointer";
+    element.querySelector("[menu-request]").style.display = "inline-flex";
+  });
+  element.addEventListener("mouseleave", () => {
+    element.querySelector("[menu-request]").style.display = "none";
+  });
+  element
+    .querySelector("[request-name-method]")
+    .addEventListener("click", (e) => {
+      alert("https://www.example.com/api/");
+    });
+  element.querySelector("[delete-request]").addEventListener("click", (e) => {
+    e.target.closest("[request-container]").remove();
+  });
   return element;
 }

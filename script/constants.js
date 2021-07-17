@@ -1,0 +1,12 @@
+export const USERS = "USERS";
+export const COLLECTIONS = "COLLECTIONS";
+export const ADMIN = "ADMIN";
+export const DEVELOPER = "DEVELOPER";
+export const NAME = "NAME";
+export const PRIVILEGE = "PRIVILEGE";
+export const APIS = "APIS";
+export const METHOD = "METHOD";
+export const URL = "URL";
+export const HEADERS = "HEADERS";
+export const BODY = "BODY";
+export const PARAMS = "PARAMS";

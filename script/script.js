@@ -3,9 +3,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import prettyBytes from "pretty-bytes";
 import setupEditor from "./editor";
+import { doIfSure, errorAlertModal, successAlertModal } from "./modals";
+import {
+  APIS,
+  BODY,
+  COLLECTIONS,
+  HEADERS,
+  METHOD,
+  PARAMS,
+  URL,
+} from "./constants";
 
-// Request Response Script
-
+export let currCollectionId = "";
+export let currApiId = "";
 const form = document.querySelector("[data-form]");
 const queryParamsContainer = document.querySelector("[data-query-params]");
 const requestHeaderContainer = document.querySelector("[data-request-headers]");
@@ -14,9 +24,16 @@ const responseHeadersContainer = document.querySelector(
   "[data-response-headers]"
 );
 const loadingSpan = document.querySelector("[request-loading]");
+const openedApi = document.querySelector("[opened-api]");
+const openedApiCollection = document.querySelector("[opened-api-collection]");
+const openedApiUrl = document.querySelector("[opened-api-url]");
+const saveOpenedApi = document.querySelector("[save-opened-api]");
+const reset = document.querySelector("[reset-data]");
 
-function createKeyValuePair() {
+function createKeyValuePair(key = "", value = "") {
   const element = keyValueTemplate.content.cloneNode(true);
+  element.querySelector("[data-key]").value = key;
+  element.querySelector("[data-value]").value = value;
   element.querySelector("[data-remove-btn]").addEventListener("click", (e) => {
     e.target.closest("[data-key-value-pair]").remove();
   });
@@ -34,9 +51,6 @@ document
   .addEventListener("click", () => {
     requestHeaderContainer.append(createKeyValuePair());
   });
-
-queryParamsContainer.append(createKeyValuePair());
-requestHeaderContainer.append(createKeyValuePair());
 
 function keyValuePairsToObjects(container) {
   const pairs = container.querySelectorAll("[data-key-value-pair]");
@@ -57,8 +71,12 @@ function updateResponseDetails(response) {
   );
 }
 
-const { requestEditor, updateResponseBodyEditor, updateResponseFullEditor } =
-  setupEditor();
+const {
+  requestEditor,
+  updateRequestBodyEditor,
+  updateResponseBodyEditor,
+  updateResponseFullEditor,
+} = setupEditor();
 
 function updateResponseEditor(response) {
   updateResponseBodyEditor(response.data);
@@ -128,83 +146,135 @@ form.addEventListener("submit", (e) => {
     });
 });
 
-// Collection List Script
-
-const collectionList = document.querySelector("[collection-list]");
-const collectionTemplate = document.querySelector("[collection-name-template]");
-
-addCollectionToList();
-
-function addCollectionToList() {
-  collectionList.append(createNewCollection());
-}
-
-function createNewCollection() {
-  const root = collectionTemplate.content.cloneNode(true);
-  const element = root.querySelector("[collection-container]");
-  element.querySelector("[collection-name]").textContent = "API Coaster APIs";
-  element.addEventListener("mouseenter", () => {
-    element.style.cursor = "pointer";
-    element.querySelector("[menu-collection]").style.display = "inline-flex";
-  });
-  element.addEventListener("mouseleave", () => {
-    element.querySelector("[menu-collection]").style.display = "none";
-  });
-  element
-    .querySelector("[collection-name-chevron]")
-    .addEventListener("click", (e) => {
-      const chevron = element
-        .querySelector("[collection-name-chevron]")
-        .querySelector("[collection-chevron]");
-      if (chevron.classList.contains("fa-chevron-right")) {
-        chevron.classList.remove("fa-chevron-right");
-        chevron.classList.add("fa-chevron-down");
+saveOpenedApi.addEventListener("click", () => {
+  if (currApiId === "" || currCollectionId === "") {
+    openedApi.style.display = "none";
+    return;
+  }
+  const obj = {};
+  obj[URL] = document.querySelector("[data-url]").value;
+  try {
+    obj[BODY] = JSON.parse(requestEditor.state.doc.toString() || null);
+  } catch (error) {
+    alert("JSON data malformed");
+    return;
+  }
+  obj[HEADERS] = keyValuePairsToObjects(requestHeaderContainer);
+  obj[PARAMS] = keyValuePairsToObjects(queryParamsContainer);
+  obj[METHOD] = document.querySelector("[data-method]").value;
+  firebase
+    .database()
+    .ref(`${COLLECTIONS}/${currCollectionId}/${APIS}/${currApiId}`)
+    .set(obj, (error) => {
+      if (error) {
+        errorAlertModal.show();
+        setTimeout(() => {
+          errorAlertModal.hide();
+        }, 4000);
       } else {
-        chevron.classList.remove("fa-chevron-down");
-        chevron.classList.add("fa-chevron-right");
+        successAlertModal.show();
+        setTimeout(() => {
+          successAlertModal.hide();
+        }, 4000);
       }
     });
-  element
-    .querySelector("[delete-collection]")
-    .addEventListener("click", (e) => {
-      collectionList.remove(root);
+});
+
+export function addRequest(id) {
+  const obj = {};
+  obj[URL] = document.querySelector("[data-url]").value;
+  if (obj[URL] === "") {
+    alert("URL cannot be empty");
+    return;
+  }
+  try {
+    obj[BODY] = JSON.parse(requestEditor.state.doc.toString() || null);
+  } catch (error) {
+    alert("JSON data malformed");
+    return;
+  }
+  obj[HEADERS] = keyValuePairsToObjects(requestHeaderContainer);
+  obj[PARAMS] = keyValuePairsToObjects(queryParamsContainer);
+  obj[METHOD] = document.querySelector("[data-method]").value;
+  firebase
+    .database()
+    .ref(`${COLLECTIONS}/${id}/${APIS}/`)
+    .push(obj, (error) => {
+      if (error) {
+        errorAlertModal.show();
+        setTimeout(() => {
+          errorAlertModal.hide();
+        }, 4000);
+      } else {
+        successAlertModal.show();
+        setTimeout(() => {
+          successAlertModal.hide();
+        }, 4000);
+      }
     });
-  return element;
 }
 
-// Request List
+export const resetData = () => {
+  currApiId = "";
+  currCollectionId = "";
+  openedApi.style.display = "none";
+  document.querySelector("[data-url]").value = "";
+  resetContainer(requestHeaderContainer);
+  resetContainer(queryParamsContainer);
+  document.querySelector("[data-method]").value = "GET";
+  updateRequestBodyEditor({});
+  updateResponseBodyEditor({});
+  updateResponseFullEditor({});
+  responseHeadersContainer.innerHTML = "";
+};
 
-const requestList = document.querySelector("[request-list]");
-const requestTemplate = document.querySelector("[request-name-template]");
+reset.addEventListener("click", () => {
+  doIfSure(resetData);
+});
 
-addRequestToList();
-
-function addRequestToList() {
-  collectionList.append(createNewRequest());
-  collectionList.append(createNewRequest());
+function resetContainer(container) {
+  const pairs = container.querySelectorAll("[data-key-value-pair]");
+  pairs.forEach((element) => {
+    element.remove();
+  });
 }
 
-function createNewRequest() {
-  const element = requestTemplate.content
-    .cloneNode(true)
-    .querySelector("[request-container]");
-  element.querySelector("[request-method]").textContent = "GET";
-  element.querySelector("[request-name]").textContent =
-    "https://www.example.com/api/";
-  element.addEventListener("mouseenter", () => {
-    element.style.cursor = "pointer";
-    element.querySelector("[menu-request]").style.display = "inline-flex";
-  });
-  element.addEventListener("mouseleave", () => {
-    element.querySelector("[menu-request]").style.display = "none";
-  });
-  element
-    .querySelector("[request-name-method]")
-    .addEventListener("click", (e) => {
-      alert("https://www.example.com/api/");
-    });
-  element.querySelector("[delete-request]").addEventListener("click", (e) => {
-    e.target.closest("[request-container]").remove();
-  });
-  return element;
+export function setApiDetails(details) {
+  currCollectionId = details.colId;
+  currApiId = details.apiId;
+  openedApi.style.display = "flex";
+  openedApiCollection.textContent = details.colName;
+  openedApiUrl.textContent = document.querySelector("[data-url]").value;
+}
+
+export function setHeaders(obj) {
+  resetContainer(requestHeaderContainer);
+  if (obj === null || obj === undefined) {
+    return;
+  }
+  for (let key of Object.keys(obj)) {
+    requestHeaderContainer.append(createKeyValuePair(key, obj[key]));
+  }
+}
+
+export function setParams(obj) {
+  resetContainer(queryParamsContainer);
+  if (obj === null || obj === undefined) {
+    return;
+  }
+  for (let key of Object.keys(obj)) {
+    queryParamsContainer.append(createKeyValuePair(key, obj[key]));
+  }
+}
+
+export function setBody(obj) {
+  updateRequestBodyEditor(obj || {});
+}
+
+export function setUrl(url) {
+  document.querySelector("[data-url]").value = url;
+}
+
+export function setMethod(method) {
+  document.querySelector("[data-method]").value = method;
 }

@@ -1,7 +1,6 @@
-import { errorAlertModal } from "./modals";
-import { addCollectionsToList } from "./collection-list";
-import { COLLECTIONS, USERS } from "./constants";
-import { resetData } from "./script";
+import { errorAlertModal } from "./alerts.js";
+import { addCollectionToList } from "./collection-list.js";
+import { COLLECTIONS, USERS } from "./constants.js";
 
 const button = document.querySelector("[sign-in-button]");
 const navBar = document.querySelector("[nav-bar]");
@@ -48,7 +47,6 @@ function checkAuthState() {
       dp.classList.remove("d-inline-block");
       signOutButton.style.display = "none";
       navBarRow.classList.add("text-center");
-      collectionList.innerHTML = "";
       collectionList.style.display = "none";
     }
   });
@@ -56,7 +54,7 @@ function checkAuthState() {
 
 signOutButton.addEventListener("click", () => {
   firebase.auth().signOut();
-  resetData();
+  checkAuthState();
 });
 
 function saveUserData(user) {
@@ -84,11 +82,10 @@ function getCollections(uid) {
     .ref(`${USERS}/${uid}/${COLLECTIONS}`)
     .on("value", (snapsot) => {
       if (snapsot.exists()) {
-        let arr = [];
+        console.log(snapsot.val());
         for (let key of Object.keys(snapsot.val())) {
-          arr = [...arr, { key: key, value: snapsot.val()[key] }];
+          addCollectionToList(key, snapsot.val()[key]);
         }
-        addCollectionsToList(arr);
       }
     });
 }

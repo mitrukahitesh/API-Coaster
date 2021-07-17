@@ -130,47 +130,11 @@
         </div>
 
         <div
-          class="col-xl-9 col-md-8 p-4 pt-2"
+          class="col-xl-9 col-md-8 p-4"
           style="overflow-y: auto; max-height: 90vh"
         >
           <form data-form>
-            <div
-              class="input-group border align-items-center ps-3"
-              opened-api
-              style="display: none"
-            >
-              <div
-                class="
-                  flex-grow-0
-                  w-auto
-                  text-center text-secondary
-                  font-weight-bold
-                  fs-4
-                "
-              >
-                [&nbsp;
-              </div>
-              <div
-                class="flex-grow-0 w-auto text-center w-auto"
-                opened-api-collection
-              ></div>
-              <div
-                class="
-                  flex-grow-0
-                  w-auto
-                  text-center text-secondary
-                  font-weight-bold
-                  fs-4
-                "
-              >
-                &nbsp;]
-              </div>
-              <div class="flex-grow-1 text-secondary ps-3" opened-api-url></div>
-              <button type="button" class="btn btn-success" save-opened-api>
-                Save Changes
-              </button>
-            </div>
-            <div class="input-group mb-4 mt-4">
+            <div class="input-group mb-4">
               <select class="form-select flex-grow-0 w-auto" data-method>
                 <option value="GET" selected>GET</option>
                 <option value="POST">POST</option>
@@ -292,14 +256,6 @@
               </div>
             </div>
           </form>
-
-          <button
-            type="button"
-            class="btn btn-danger mt-2 float-end"
-            reset-data
-          >
-            Reset
-          </button>
 
           <div class="mt-5" data-response-section>
             <h3>Response</h3>
@@ -571,55 +527,6 @@
       </div>
     </div>
 
-    <!-- For final decision -->
-    <div
-      class="modal fade"
-      id="modalAssure"
-      tabindex="-1"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalNewLabel">Confirmation</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form assurance-form>
-              <div class="input-group mb-4">
-                <div>Are you sure?</div>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn"
-                  data-bs-dismiss="modal"
-                  yes-reset
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-success"
-                  data-bs-dismiss="modal"
-                >
-                  No
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Templates -->
 
     <!-- For making request -->
@@ -661,11 +568,7 @@
             </div>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
               <li><div class="dropdown-item">Share</div></li>
-              <li>
-                <div class="dropdown-item text-success" add-request-collection>
-                  Add current request
-                </div>
-              </li>
+              <li><div class="dropdown-item text-success">Add request</div></li>
               <li>
                 <div class="dropdown-item text-danger" delete-collection>
                   Delete
@@ -712,6 +615,8 @@
             <i class="fas fa-ellipsis-v"></i>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <!-- <li><div class="dropdown-item">Share</div></li>
+            <li><div class="dropdown-item text-success">Add request</div></li> -->
             <li>
               <div class="dropdown-item text-danger" delete-request>Delete</div>
             </li>
@@ -729,6 +634,7 @@
     <script src="./script/firebase.js" type="module"></script>
     <script src="./script/signin.js" type="module"></script>
     <script src="./script/constants.js" type="module"></script>
+    <script src="./script/constant-elements.js" type="module"></script>
     <script src="./script/modals.js" type="module"></script>
   </body>
 </html>

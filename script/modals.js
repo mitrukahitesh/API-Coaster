@@ -4,9 +4,9 @@ import { ADMIN, COLLECTIONS, USERS } from "./constants";
 const successAlertDom = document.getElementById("successAlertModal");
 const errorAlertDom = document.getElementById("errorAlertModal");
 const signinAlertDom = document.getElementById("signinAlertModal");
-export const successAlertModal = Modal.getOrCreateInstance(successAlertDom);
-export const errorAlertModal = Modal.getOrCreateInstance(errorAlertDom);
-export const signinAlertModal = Modal.getOrCreateInstance(signinAlertDom);
+const successAlertModal = Modal.getOrCreateInstance(successAlertDom);
+const errorAlertModal = Modal.getOrCreateInstance(errorAlertDom);
+const signinAlertModal = Modal.getOrCreateInstance(signinAlertDom);
 
 const modalNewDom = document.getElementById("modalNew");
 const formNew = document.querySelector("[new-collection-form]");
@@ -53,19 +53,13 @@ function createNewCollection(name) {
       .ref(USERS + "/" + uid + "/" + COLLECTIONS + "/" + newKey)
       .set(obj, (error) => {
         if (error) {
-          errorAlertModal.show();
-          setTimeout(() => {
-            errorAlertModal.hide();
-          }, 4000);
+          showError("Error");
         } else {
           firebase
             .database()
             .ref(COLLECTIONS + "/" + newKey)
             .update({ NAME: name });
-          successAlertModal.show();
-          setTimeout(() => {
-            successAlertModal.hide();
-          }, 4000);
+          showSuccess("Success");
         }
       });
   } else {
@@ -79,4 +73,20 @@ function createNewCollection(name) {
 export function doIfSure(task) {
   formAssure.querySelector("[yes-reset]").onclick = task;
   modalAssure.show();
+}
+
+export function showError(message) {
+  errorAlertDom.querySelector("[error-message]").textContent = message;
+  errorAlertModal.show();
+  setTimeout(() => {
+    errorAlertModal.hide();
+  }, 4000);
+}
+
+export function showSuccess(message) {
+  successAlertDom.querySelector("[success-message]").textContent = message;
+  successAlertModal.show();
+  setTimeout(() => {
+    successAlertModal.hide();
+  }, 4000);
 }

@@ -502,6 +502,56 @@
       </div>
     </div>
 
+    <!-- For team management collection -->
+    <div
+      class="modal fade"
+      id="modalTeam"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTeamLabel">Team Management</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form import-collection-form>
+              <div class="input-group border align-items-center mb-4">
+                <div class="flex-grow-1 text-secondary ps-2">
+                  adadadadadasdasdasdasdad
+                </div>
+                <button type="button" class="btn btn-primary">Copy Link</button>
+              </div>
+              <div class="input-group mb-4">
+                <input
+                  import-collection-url
+                  required
+                  class="form-control"
+                  placeholder="https://example.com/api"
+                  type="url"
+                />
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal">
+                  Close
+                </button>
+                <button type="submit" class="btn btn-success">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- For showing success alerts -->
     <div class="modal" tabindex="-1" id="successAlertModal">
       <div class="modal-dialog">
@@ -519,7 +569,7 @@
             >
               <use xlink:href="#check-circle-fill" />
             </svg>
-            <div class="ms-3">Success</div>
+            <div class="ms-3" success-message>Success</div>
           </div>
         </div>
       </div>
@@ -542,7 +592,7 @@
             >
               <use xlink:href="#exclamation-triangle-fill" />
             </svg>
-            <div class="ms-3">Error</div>
+            <div class="ms-3" error-message>Error</div>
           </div>
         </div>
       </div>
@@ -660,7 +710,16 @@
               <i class="fas fa-ellipsis-v"></i>
             </div>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><div class="dropdown-item">Share</div></li>
+              <li>
+                <div
+                  class="dropdown-item btn btn-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalTeam"
+                  team-collection
+                >
+                  Team
+                </div>
+              </li>
               <li>
                 <div class="dropdown-item text-success" add-request-collection>
                   Add current request
@@ -717,6 +776,24 @@
             </li>
           </ul>
         </div>
+      </div>
+    </template>
+
+    <!-- For team members -->
+    <template team-member-template>
+      <div class="input-group mt-2" team-member>
+        <select class="form-select flex-grow-0 w-auto" member-privilege>
+          <option value="DEVELOPER" selected>DEV</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
+        <input
+          required
+          class="form-control"
+          placeholder="https://example.com/api/"
+          type="email"
+          member-email
+        />
+        <button type="button" class="btn btn-danger">Remove</button>
       </div>
     </template>
 

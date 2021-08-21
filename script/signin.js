@@ -1,4 +1,4 @@
-import { errorAlertModal } from "./modals";
+import { showError } from "./modals";
 import { addCollectionsToList } from "./collection-list";
 import { COLLECTIONS, USERS } from "./constants";
 import { resetData } from "./script";
@@ -71,7 +71,7 @@ function saveUserData(user) {
     .update(obj, (error) => {
       if (error) {
         firebase.auth().signOut();
-        errorAlertModal.show();
+        showError("Error");
       }
     });
 }

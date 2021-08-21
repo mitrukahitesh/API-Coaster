@@ -7,8 +7,11 @@ import {
   BODY,
   HEADERS,
   PARAMS,
+  PRIVILEGE,
+  ADMIN,
 } from "./constants";
 import setupEditor from "./editor";
+import { showError } from "./modals";
 import {
   setBody,
   setHeaders,
@@ -19,6 +22,7 @@ import {
   currApiId,
   currCollectionId,
   addRequest,
+  resetData,
 } from "./script";
 
 const collectionList = document.querySelector("[collection-list]");
@@ -33,6 +37,8 @@ export const addCollectionsToList = (arr) => {
 };
 
 function createNewCollection(key, value) {
+  let hide = true;
+  let admin = value[PRIVILEGE] === ADMIN;
   const root = collectionTemplate.content
     .cloneNode(true)
     .querySelector("[root-collection]");
@@ -42,9 +48,14 @@ function createNewCollection(key, value) {
   element.addEventListener("mouseenter", () => {
     element.style.cursor = "pointer";
     element.querySelector("[menu-collection]").style.display = "inline-flex";
+    hide = false;
   });
   element.addEventListener("mouseleave", () => {
-    element.querySelector("[menu-collection]").style.display = "none";
+    hide = true;
+    setTimeout(() => {
+      if (hide)
+        element.querySelector("[menu-collection]").style.display = "none";
+    }, 200);
   });
   element
     .querySelector("[collection-name-chevron]")
@@ -65,18 +76,26 @@ function createNewCollection(key, value) {
   element
     .querySelector("[add-request-collection]")
     .addEventListener("click", () => {
+      if (!admin) {
+        showError("Admin privilege required!");
+        return;
+      }
       addRequest(key);
     });
   element
     .querySelector("[delete-collection]")
     .addEventListener("click", (e) => {
+      if (!admin) {
+        showError("Admin privilege required!");
+        return;
+      }
       e.target.closest("[root-collection]").remove();
     });
-  getApis(key, value[NAME], reqList);
+  getApis(key, value[NAME], reqList, admin);
   return root;
 }
 
-function getApis(colId, colName, reqList) {
+function getApis(colId, colName, reqList, admin) {
   firebase
     .database()
     .ref(`${COLLECTIONS}/${colId}/${APIS}`)
@@ -85,14 +104,14 @@ function getApis(colId, colName, reqList) {
         reqList.innerHTML = "";
         for (let key of Object.keys(snapshot.val())) {
           reqList.append(
-            createNewRequest(colId, colName, key, snapshot.val()[key])
+            createNewRequest(colId, colName, key, snapshot.val()[key], admin)
           );
         }
       }
     });
 }
 
-function createNewRequest(colId, colName, apiId, obj) {
+function createNewRequest(colId, colName, apiId, obj, admin) {
   const element = requestTemplate.content
     .cloneNode(true)
     .querySelector("[request-container]");
@@ -102,7 +121,7 @@ function createNewRequest(colId, colName, apiId, obj) {
   element
     .querySelector("[request-name-method]")
     .addEventListener("click", (e) => {
-      openApi(obj, { colName: colName, colId: colId, apiId: apiId });
+      openApi(obj, { colName: colName, colId: colId, apiId: apiId }, admin);
     });
   element.querySelector("[request-method]").textContent = obj[METHOD];
   element.querySelector("[request-name]").textContent = obj[URL];
@@ -114,16 +133,23 @@ function createNewRequest(colId, colName, apiId, obj) {
     element.querySelector("[menu-request]").style.display = "none";
   });
   element.querySelector("[delete-request]").addEventListener("click", (e) => {
+    if (!admin) {
+      showError("Admin privilege required!");
+      return;
+    }
     e.target.closest("[request-container]").remove();
   });
   return element;
 }
 
-function openApi(obj, details) {
+function openApi(obj, details, admin) {
+  resetData();
   setBody(obj[BODY]);
   setHeaders(obj[HEADERS]);
   setParams(obj[PARAMS]);
   setUrl(obj[URL]);
   setMethod(obj[METHOD]);
-  setApiDetails(details);
+  if (admin) {
+    setApiDetails(details);
+  }
 }

@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import prettyBytes from "pretty-bytes";
 import setupEditor from "./editor";
-import { doIfSure, errorAlertModal, successAlertModal } from "./modals";
+import { doIfSure, showError, showSuccess } from "./modals";
 import {
   APIS,
   BODY,
@@ -123,7 +123,7 @@ form.addEventListener("submit", (e) => {
   try {
     data = JSON.parse(requestEditor.state.doc.toString() || null);
   } catch (e) {
-    alert("JSON data is malformed");
+    showError("JSON data is malformed");
     return;
   }
 
@@ -156,7 +156,7 @@ saveOpenedApi.addEventListener("click", () => {
   try {
     obj[BODY] = JSON.parse(requestEditor.state.doc.toString() || null);
   } catch (error) {
-    alert("JSON data malformed");
+    showError("JSON data malformed");
     return;
   }
   obj[HEADERS] = keyValuePairsToObjects(requestHeaderContainer);
@@ -167,15 +167,9 @@ saveOpenedApi.addEventListener("click", () => {
     .ref(`${COLLECTIONS}/${currCollectionId}/${APIS}/${currApiId}`)
     .set(obj, (error) => {
       if (error) {
-        errorAlertModal.show();
-        setTimeout(() => {
-          errorAlertModal.hide();
-        }, 4000);
+        showError("Error");
       } else {
-        successAlertModal.show();
-        setTimeout(() => {
-          successAlertModal.hide();
-        }, 4000);
+        showSuccess("Success");
       }
     });
 });
@@ -184,13 +178,13 @@ export function addRequest(id) {
   const obj = {};
   obj[URL] = document.querySelector("[data-url]").value;
   if (obj[URL] === "") {
-    alert("URL cannot be empty");
+    showError("URL cannot be empty");
     return;
   }
   try {
     obj[BODY] = JSON.parse(requestEditor.state.doc.toString() || null);
   } catch (error) {
-    alert("JSON data malformed");
+    showError("JSON data malformed");
     return;
   }
   obj[HEADERS] = keyValuePairsToObjects(requestHeaderContainer);
@@ -201,15 +195,9 @@ export function addRequest(id) {
     .ref(`${COLLECTIONS}/${id}/${APIS}/`)
     .push(obj, (error) => {
       if (error) {
-        errorAlertModal.show();
-        setTimeout(() => {
-          errorAlertModal.hide();
-        }, 4000);
+        showError("Error");
       } else {
-        successAlertModal.show();
-        setTimeout(() => {
-          successAlertModal.hide();
-        }, 4000);
+        showSuccess("Success");
       }
     });
 }
@@ -248,7 +236,6 @@ export function setApiDetails(details) {
 }
 
 export function setHeaders(obj) {
-  resetContainer(requestHeaderContainer);
   if (obj === null || obj === undefined) {
     return;
   }
@@ -258,7 +245,6 @@ export function setHeaders(obj) {
 }
 
 export function setParams(obj) {
-  resetContainer(queryParamsContainer);
   if (obj === null || obj === undefined) {
     return;
   }

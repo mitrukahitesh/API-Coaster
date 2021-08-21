@@ -9,9 +9,10 @@ import {
   PARAMS,
   PRIVILEGE,
   ADMIN,
+  USERS,
 } from "./constants";
 import setupEditor from "./editor";
-import { showError } from "./modals";
+import { doIfSure, showError, showTeamManagement } from "./modals";
 import {
   setBody,
   setHeaders,
@@ -36,6 +37,8 @@ export const addCollectionsToList = (arr) => {
   });
 };
 
+// key is id
+// value is object
 function createNewCollection(key, value) {
   let hide = true;
   let admin = value[PRIVILEGE] === ADMIN;
@@ -74,6 +77,12 @@ function createNewCollection(key, value) {
       }
     });
   element
+    .querySelector("[menu-collection]")
+    .querySelector("[team-collection]")
+    .addEventListener("click", () => {
+      showTeamManagement(key, value[NAME], admin);
+    });
+  element
     .querySelector("[add-request-collection]")
     .addEventListener("click", () => {
       if (!admin) {
@@ -89,7 +98,14 @@ function createNewCollection(key, value) {
         showError("Admin privilege required!");
         return;
       }
-      e.target.closest("[root-collection]").remove();
+      doIfSure(() => {
+        firebase
+          .database()
+          .ref(
+            `${USERS}/${firebase.auth().currentUser.uid}/${COLLECTIONS}/${key}`
+          )
+          .remove();
+      });
     });
   getApis(key, value[NAME], reqList, admin);
   return root;
@@ -112,6 +128,7 @@ function getApis(colId, colName, reqList, admin) {
 }
 
 function createNewRequest(colId, colName, apiId, obj, admin) {
+  let hide = true;
   const element = requestTemplate.content
     .cloneNode(true)
     .querySelector("[request-container]");
@@ -128,16 +145,25 @@ function createNewRequest(colId, colName, apiId, obj, admin) {
   element.addEventListener("mouseenter", () => {
     element.style.cursor = "pointer";
     element.querySelector("[menu-request]").style.display = "inline-flex";
+    hide = false;
   });
   element.addEventListener("mouseleave", () => {
-    element.querySelector("[menu-request]").style.display = "none";
+    hide = true;
+    setTimeout(() => {
+      if (hide) element.querySelector("[menu-request]").style.display = "none";
+    }, 200);
   });
   element.querySelector("[delete-request]").addEventListener("click", (e) => {
     if (!admin) {
       showError("Admin privilege required!");
       return;
     }
-    e.target.closest("[request-container]").remove();
+    doIfSure(() => {
+      firebase
+        .database()
+        .ref(`${COLLECTIONS}/${colId}/${APIS}/${apiId}`)
+        .remove();
+    });
   });
   return element;
 }

@@ -196,8 +196,6 @@ export function addRequest(id) {
     .push(obj, (error) => {
       if (error) {
         showError("Error");
-      } else {
-        showSuccess("Success");
       }
     });
 }

@@ -10,5 +10,6 @@ API Coaster is a web application where users can test their APIs that work with 
 
 ```
 1. Clone the project
-2. Run "npm install && npm start"
+2. cd API-Coaster
+3. Run "npm install && npm start"
 ```
